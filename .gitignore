@@ -4,4 +4,4 @@
 bin/
 doc/*.aux
 doc/*.log
-doc/*.syntex.gz
+doc/*.synctex.gz
