@@ -2,3 +2,6 @@
 .cproject
 .project
 bin/
+doc/*.aux
+doc/*.log
+doc/*.syntex.gz

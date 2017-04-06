@@ -1,0 +1,6 @@
+ve q 4 5 e ~1 2 3
+ve q 4 e ~2 3
+rs q 4 e 1
+rs q 5 e 1
+ve q 1 2 3 4 5 e
+rs q ~1 ~2 ~4 ~5 e 
