@@ -1,12 +1,14 @@
 #ifndef INCLUDE_NETWORK_HPP_
 #define INCLUDE_NETWORK_HPP_
 
-using namespace std;
+#include <vector>
 
+//=============================================================================
+// STRUCTS
+//=============================================================================
 struct node {
-		int** conditional_probability_table;
-		int total_parents;
-		int* parent_ids;
+		double** conditional_probability_table;
+		std::vector<int> parent_ids;
 };
 
 struct network {
