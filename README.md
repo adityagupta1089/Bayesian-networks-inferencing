@@ -9,5 +9,5 @@ make all
 ```
 e.g.
 ```
-./bin/main.o b1.txt q1.txt o11.txt
+./bin/main.o input/b1.txt input/q1.txt output/o11.txt
 ```

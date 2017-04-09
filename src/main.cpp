@@ -2,8 +2,6 @@
 #include <stdlib.h>
 
 #include "functions.hpp"
-#include "read_write.cpp"
-#include "queries.cpp"
 
 int main(int argc, char** argv) {
 	if (argc < 4) {
