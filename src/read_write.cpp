@@ -1,13 +1,14 @@
 #ifndef READ_WRITE_CPP
 #define READ_WRITE_CPP
 
-#include <network.hpp>
 #include <functions.hpp>
+#include <network.hpp>
 #include <cstdlib>
-#include <iostream>
-#include <string>
 #include <fstream>
+#include <iostream>
 #include <sstream>
+#include <string>
+#include <vector>
 
 struct network;
 

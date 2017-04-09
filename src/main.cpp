@@ -1,5 +1,6 @@
 #include <functions.hpp>
 #include <network.hpp>
+#include <queries.hpp>
 #include <stdio.h>
 #include <stdlib.h>
 

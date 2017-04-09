@@ -2,6 +2,7 @@
 #define QUERIES_CPP
 
 #include <functions.hpp>
+#include <queries.hpp>
 #include <cstdlib>
 #include <fstream>
 #include <sstream>
@@ -68,13 +69,4 @@ void process_queries(char* input_file_name, network& _network,
 	}
 }
 
-void process_query_variable_elimination(std::vector<int>& query_variables,
-		std::vector<int>& evidence_variables, std::ofstream& out) {
-
-}
-
-void process_query_rejection_sampling(std::vector<int>& query_variables,
-		std::vector<int>& evidence_variables, std::ofstream& out) {
-
-}
 #endif /*QUERIES_CPP*/

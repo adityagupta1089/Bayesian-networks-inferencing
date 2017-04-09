@@ -1,19 +1,23 @@
-#ifndef INCLUDE_FUNCTIONS_HPP_
-#define INCLUDE_FUNCTIONS_HPP_
-
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <vector>
-
 //=============================================================================
 // FORWARD DECLARATIONS
 //=============================================================================
-struct network;
+struct factor;
 
 //=============================================================================
-// PROTOTYPES
+// FUNCTIONS
 //=============================================================================
-void read_input(char* file_name, network& _network);
+void reduce(factor& x, factor& y, factor& result) {
 
-#endif /* INCLUDE_FUNCTIONS_HPP_ */
+}
+
+void join(factor& x, factor& y, factor& result) {
+
+}
+
+void sum(factor& x, factor& y, factor& result) {
+
+}
+
+void normalize(factor& x, factor& result) {
+
+}
