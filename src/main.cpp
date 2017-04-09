@@ -1,7 +1,7 @@
+#include <functions.hpp>
+#include <network.hpp>
 #include <stdio.h>
 #include <stdlib.h>
-
-#include "functions.hpp"
 
 int main(int argc, char** argv) {
 	if (argc < 4) {
@@ -9,7 +9,9 @@ int main(int argc, char** argv) {
 		exit(1);
 	}
 
-	read_input(argv[1]);
+	network _network;
+
+	read_input(argv[1], _network);
 	process_queries(argv[2]);
 	write_results(argv[3]);
 
