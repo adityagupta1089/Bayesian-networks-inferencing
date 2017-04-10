@@ -1,7 +1,9 @@
 #include <iostream>
 #include <vector>
 
-void process_query_variable_elimination(std::vector<int>& query_variables,
+struct network;
+
+void process_query_variable_elimination(network& _network, std::vector<int>& query_variables,
 		std::vector<int>& evidence_variables, std::ofstream& out) {
 	//TODO
 	/* Start with initial factors (Local CPTs instantiated by evidence variable) */

@@ -60,10 +60,10 @@ void process_queries(char* input_file_name, network& _network,
 		}
 
 		if (inference_technique.compare(VARIABLE_ELIMINATION) == 0)
-			process_query_variable_elimination(query_variables,
+			process_query_variable_elimination(_network, query_variables,
 					evidence_variables, out);
 		else if (inference_technique.compare(REJECTION_SAMPLING) == 0)
-			process_query_rejection_sampling(query_variables,
+			process_query_rejection_sampling(_network, query_variables,
 					evidence_variables, out);
 
 	}
