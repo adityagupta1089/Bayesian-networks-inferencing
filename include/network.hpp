@@ -1,19 +1,19 @@
 #ifndef INCLUDE_NETWORK_HPP_
 #define INCLUDE_NETWORK_HPP_
 
+#include <factors.hpp>
 #include <vector>
 
 //=============================================================================
 // STRUCTS
 //=============================================================================
 struct node {
-		double** conditional_probability_table;
-		std::vector<int> parent_ids;
+		factor cpt;
 };
 
 struct network {
 		int total_nodes;
-		node* nodes;
+		std::vector<node> nodes;
 };
 
 #endif /* INCLUDE_NETWORK_HPP_ */

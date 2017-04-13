@@ -3,12 +3,12 @@ SDIR=src
 ODIR=bin
 
 CC=clang++
-CFLAGS=-I$(IDIR) -std=c++11 -Wall
+CFLAGS=-I$(IDIR) -std=c++11 -Wall -g
 
 _DEPS = functions.hpp network.hpp queries.hpp
 DEPS = $(patsubst %, $(IDIR)/%, $(_DEPS))
 
-SOURCES = factors.cpp queries.cpp read_write.cpp rejection_sampling.cpp variable_elimination.cpp 
+SOURCES = factors.cpp print.cpp queries.cpp read_write.cpp rejection_sampling.cpp variable_elimination.cpp 
 _OBJ = $(SOURCES:.cpp=.o)
 OBJ = $(patsubst %, $(ODIR)/%, $(_OBJ))
 
