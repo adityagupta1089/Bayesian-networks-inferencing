@@ -34,10 +34,10 @@ void process_queries(char* input_file_name, network& _network,
 	std::ofstream out;
 	out.open(output_file_name);
 	std::string line;
-	std::vector<int> query_variables;
-	std::vector<int> evidence_variables;
 	char variable_type;
 	while (std::getline(in, line)) {
+		std::vector<int> query_variables;
+		std::vector<int> evidence_variables;
 		std::istringstream iss(line);
 		std::string inference_technique;
 		iss >> inference_technique;
