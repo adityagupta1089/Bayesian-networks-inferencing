@@ -1,8 +1,8 @@
 #ifndef QUERIES_CPP
 #define QUERIES_CPP
 
-#include <functions.hpp>
 #include <queries.hpp>
+#include <read_write.hpp>
 #include <cstdlib>
 #include <fstream>
 #include <sstream>

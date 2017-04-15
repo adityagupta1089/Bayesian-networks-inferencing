@@ -2,8 +2,8 @@
 #define READ_WRITE_CPP
 
 #include <factors.hpp>
-#include <functions.hpp>
 #include <network.hpp>
+#include <read_write.hpp>
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
@@ -43,6 +43,7 @@ void read_input(char* file_name, network& _network) {
 		while (iss >> pid) {
 			pid--;
 			_network.nodes[id].cpt.parent_ids.push_back(pid);
+			_network.nodes[id].cpt.parent_ids_set.insert(pid);
 		}
 
 		/* Process CPT */
@@ -60,6 +61,18 @@ void read_input(char* file_name, network& _network) {
 			/* P(~x|parents) */
 			iss >> _network.nodes[id].cpt.matrix[i][1];
 		}
+	}
+}
+//=============================================================================
+// WRITE
+//=============================================================================
+void write_output(factor& _factor, char* file_name) {
+	std::ofstream out;
+	out.open(file_name);
+	if (out.is_open()) {
+		//TODO
+	} else {
+		printf("Couldn't open output file\n");
 	}
 }
 #endif /*READ_WRITE_CPP*/

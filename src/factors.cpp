@@ -1,15 +1,18 @@
 #include <factors.hpp>
 #include <cstdio>
 
+//=============================================================================
+// FORWARD DECLARATIONS
+//=============================================================================
 struct factor;
 
 //=============================================================================
-// FUNCTIONS
+// REDUCE
 //=============================================================================
 void reduce(factor& x, std::vector<int>& evidence, factor& result) {
 	unsigned int total_parents = 0;
 	for (unsigned int i = 0; i < x.parent_ids.size(); i++) {
-		if (evidence[x.parent_ids[i]] == NONE) {
+		if (evidence[x.parent_ids[i]] == HIDDEN) {
 			total_parents++;
 			result.parent_ids.push_back(x.parent_ids[i]);
 		}
@@ -20,33 +23,69 @@ void reduce(factor& x, std::vector<int>& evidence, factor& result) {
 	}
 	int len = 1 << total_parents;
 	result.matrix = new double*[len];
-	reduce_matrix(x, result, evidence, 0, 0, (1 << x.parent_ids.size()), len);
+	reduce(x, result, evidence, 0, 0, (1 << x.parent_ids.size()), len);
 }
 
-void reduce_matrix(factor& x, factor& y, std::vector<int>& evidence_variables,unsigned int begin_x,unsigned int begin_y,unsigned int len_x,unsigned int len_y,unsigned int start_x, unsigned int start_y) {
+void reduce(factor& original, factor& result, std::vector<int>& evidence,
+		unsigned int begin_x, unsigned int begin_y, unsigned int len_x,
+		unsigned int len_y, unsigned int start_x, unsigned int start_y) {
+	/* No parents of original factor (length = 1), no need to reduce */
 	if (len_x == 1) {
-		y.matrix[begin_y] = new double[2];
-		y.matrix[begin_y][0] = x.matrix[begin_x][0];
-		y.matrix[begin_y][1] = x.matrix[begin_x][1];
+		result.matrix[begin_y] = new double[2];
+		result.matrix[begin_y][0] = original.matrix[begin_x][0];
+		result.matrix[begin_y][1] = original.matrix[begin_x][1];
 		return;
 	}
-	if (y.parent_ids.size() <= start_y || x.parent_ids[start_x] != y.parent_ids[start_y]) {
-		if (evidence_variables[x.parent_ids[start_x]]) reduce_matrix(x, y, evidence_variables, begin_x, begin_y, len_x / 2, len_y, start_x + 1, start_y);
-		else reduce_matrix(x, y, evidence_variables, begin_x + len_x / 2, begin_y, len_x / 2, len_y, start_x + 1, start_y);
+	/* Why is this condition there? Do you assume that parent ids are sorted? */
+	if (result.parent_ids.size() <= start_y
+			|| original.parent_ids[start_x] != result.parent_ids[start_y]) {
+		/* parent start_x of original factor is not a parent of reduced factor,
+		 * increase start_x (this parent processed) and reduce the corresponding
+		 * part of the table according to the parents' evidence value */
+		if (evidence[original.parent_ids[start_x]] == TRUE) {
+			/* If true take the upper half */
+			reduce(original, result, evidence, begin_x, begin_y, len_x / 2,
+					len_y, start_x + 1, start_y);
+		} else {
+			/* If false take the lower half */
+			reduce(original, result, evidence, begin_x + len_x / 2, begin_y,
+					len_x / 2, len_y, start_x + 1, start_y);
+		}
 		return;
+	} else {
+		/* Both parents at current indices are same, reduce upper and lower
+		 * half parts both */
+		reduce(original, result, evidence, begin_x, begin_y, len_x / 2,
+				len_y / 2, start_x + 1, start_y + 1);
+		reduce(original, result, evidence, begin_x + len_x / 2,
+				begin_y + len_y / 2, len_x / 2, len_y / 2, start_x + 1,
+				start_y + 1);
 	}
-	reduce_matrix(x, y, evidence_variables, begin_x, begin_y, len_x / 2, len_y / 2, start_x + 1, start_y + 1);
-	reduce_matrix(x, y, evidence_variables, begin_x + len_x / 2, begin_y + len_y / 2, len_x / 2, len_y / 2, start_x + 1, start_y + 1);
-}
-
-void join(factor& x, factor& y, factor& result) {
 
 }
 
-void sum(factor& x, factor& y, factor& result) {
+//=============================================================================
+// JOIN
+//=============================================================================
+factor join(factor x, factor y) {
+	factor result;
+	/* TODO is the joint supposed to be only on one variable, i.e. the hidden
+	 * variable? or is it supposed to be done for intersection of parent
+	 * variables? */
 
+	return result;
 }
 
-void normalize(factor& x, factor& result) {
+//=============================================================================
+// SUM
+//=============================================================================
+void sum(factor& x, int var) {
+	//TODO
+}
 
+//=============================================================================
+// NORMALIZE
+//=============================================================================
+void normalize(factor& x) {
+	//TODO
 }
