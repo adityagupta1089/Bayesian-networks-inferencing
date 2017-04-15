@@ -4,6 +4,13 @@
 #include <vector>
 
 //=============================================================================
+//CONSTANTS
+//=============================================================================
+#define NONE -1
+#define TRUE 1
+#define FALSE 0
+
+//=============================================================================
 // STRUCTS
 //=============================================================================
 /*
@@ -17,9 +24,7 @@ struct factor {
 };
 
 void reduce(factor& x, std::vector<int>& evidence_variables, factor& result);
-void reduce_matrix(factor& x, factor& y, std::vector<int>& evidence_variables,
-		int begin_x, int begin_y, int len_x, int len_y, int start_x = 0,
-		int start_y = 0);
+void reduce_matrix(factor& x, factor& y, std::vector<int>& evidence_variables, int begin_x, int begin_y, int len_x, int len_y, int start_x = 0, int start_y = 0);
 
 //=============================================================================
 // PROTOTYPES

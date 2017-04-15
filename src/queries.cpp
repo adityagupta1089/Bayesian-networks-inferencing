@@ -28,8 +28,7 @@ struct network;
 //=============================================================================
 // QUERIES
 //=============================================================================
-void process_queries(char* input_file_name, network& _network,
-		char* output_file_name) {
+void process_queries(char* input_file_name, network& _network, char* output_file_name) {
 	std::ifstream in(input_file_name);
 	std::ofstream out;
 	out.open(output_file_name);
@@ -43,28 +42,19 @@ void process_queries(char* input_file_name, network& _network,
 		iss >> inference_technique;
 		std::string token;
 		while (iss >> token) {
-			if (token[0] == QUERY_VARIABLES) {
-				variable_type = QUERY_VARIABLES;
-			} else if (token[0] == EVIDENCE_VARIABLES) {
-				variable_type = EVIDENCE_VARIABLES;
-			} else {
+			if (token[0] == QUERY_VARIABLES) variable_type = QUERY_VARIABLES;
+			else if (token[0] == EVIDENCE_VARIABLES) variable_type = EVIDENCE_VARIABLES;
+			else {
 				bool negated = token[0] == NEGATION;
-				int variable = atoi(
-						(negated ? token.substr(1) : token).c_str());
+				int variable = atoi((negated ? token.substr(1) : token).c_str());
 				variable = negated ? -variable : variable;
-				if (variable_type == QUERY_VARIABLES)
-					query_variables.push_back(variable);
-				else if (variable_type == EVIDENCE_VARIABLES)
-					evidence_variables.push_back(variable);
+				if (variable_type == QUERY_VARIABLES) query_variables.push_back(variable);
+				else if (variable_type == EVIDENCE_VARIABLES) evidence_variables.push_back(variable);
 			}
 		}
 
-		if (inference_technique.compare(VARIABLE_ELIMINATION) == 0)
-			process_query_variable_elimination(_network, query_variables,
-					evidence_variables, out);
-		else if (inference_technique.compare(REJECTION_SAMPLING) == 0)
-			process_query_rejection_sampling(_network, query_variables,
-					evidence_variables, out);
+		if (inference_technique.compare(VARIABLE_ELIMINATION) == 0) process_query_variable_elimination(_network, query_variables, evidence_variables, out);
+		else if (inference_technique.compare(REJECTION_SAMPLING) == 0) process_query_rejection_sampling(_network, query_variables, evidence_variables, out);
 
 	}
 }

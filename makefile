@@ -3,7 +3,7 @@ SDIR=src
 ODIR=bin
 
 CC=clang++
-CFLAGS=-I$(IDIR) -std=c++11 -Wall -g
+CFLAGS=-I$(IDIR) -std=c++11 -Wall
 
 _DEPS = functions.hpp network.hpp queries.hpp
 DEPS = $(patsubst %, $(IDIR)/%, $(_DEPS))
@@ -19,7 +19,7 @@ $(ODIR)/%.o: $(SDIR)/%.cpp $(DEPS)
 executable: $(OBJ)
 	$(CC) -o $(ODIR)/main.o $(SDIR)/main.cpp $(OBJ) $(CFLAGS)
 	
-all: executable $(OBJ)
+all: executable
 
 .PHONY: clean
 
