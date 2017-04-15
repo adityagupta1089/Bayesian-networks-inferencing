@@ -2,7 +2,7 @@ IDIR=include
 SDIR=src
 ODIR=bin
 
-CC=clang++
+CC=g++
 CFLAGS=-I$(IDIR) -std=c++11 -Wall
 
 _DEPS = functions.hpp network.hpp queries.hpp
