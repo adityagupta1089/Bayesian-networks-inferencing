@@ -14,6 +14,7 @@ void reduce(factor& x, std::vector<int>& evidence, factor& result) {
 	for (unsigned int i = 0; i < x.parent_ids.size(); i++) {
 		if (evidence[x.parent_ids[i]] == HIDDEN) {
 			total_parents++;
+			/* Parents in both of them will be in same order */
 			result.parent_ids.push_back(x.parent_ids[i]);
 		}
 	}
@@ -22,7 +23,7 @@ void reduce(factor& x, std::vector<int>& evidence, factor& result) {
 		return;
 	}
 	int len = 1 << total_parents;
-	result.matrix = new double*[len];
+	result.matrix = new double[len];
 	reduce(x, result, evidence, 0, 0, (1 << x.parent_ids.size()), len);
 }
 
@@ -31,12 +32,11 @@ void reduce(factor& original, factor& result, std::vector<int>& evidence,
 		unsigned int len_y, unsigned int start_x, unsigned int start_y) {
 	/* No parents of original factor (length = 1), no need to reduce */
 	if (len_x == 1) {
-		result.matrix[begin_y] = new double[2];
-		result.matrix[begin_y][0] = original.matrix[begin_x][0];
-		result.matrix[begin_y][1] = original.matrix[begin_x][1];
+		result.matrix[begin_y] = original.matrix[begin_x];
 		return;
 	}
-	/* Why is this condition there? Do you assume that parent ids are sorted? */
+	/* Both have parents in the same order so we can compare if both have same
+	 * parent at the corresponding indexes start_x and start_y */
 	if (result.parent_ids.size() <= start_y
 			|| original.parent_ids[start_x] != result.parent_ids[start_y]) {
 		/* parent start_x of original factor is not a parent of reduced factor,
@@ -53,7 +53,7 @@ void reduce(factor& original, factor& result, std::vector<int>& evidence,
 		}
 		return;
 	} else {
-		/* Both parents at current indices are same, reduce upper and lower
+		/* Both parents at current indexes are same, reduce upper and lower
 		 * half parts both */
 		reduce(original, result, evidence, begin_x, begin_y, len_x / 2,
 				len_y / 2, start_x + 1, start_y + 1);

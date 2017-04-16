@@ -20,7 +20,8 @@
  * 		... P(~x|~1,~2,~3) }
  */
 struct factor {
-		double** matrix;
+        int id;
+		double* matrix;
 		std::vector<int> parent_ids;
 		std::unordered_set<int> parent_ids_set;
 

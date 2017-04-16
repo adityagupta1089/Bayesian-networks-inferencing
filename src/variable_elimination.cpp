@@ -31,7 +31,14 @@ void process_query_variable_elimination(network& _network,
 	std::vector<factor> factors(_network.total_nodes);
 	for (node _node : _network.nodes) {
 		factor reduced_factor;
+		printf("Original factor:\n");
+		print_factor(_node.cpt);
+		printf("Evidence Variables:\n");
+		for(int x:evidence_variables)std::cout << (x<0?"-":" ") << abs(x)-1 <<", ";
+		std::cout << "\n";
 		reduce(_node.cpt, evidence, reduced_factor);
+		printf("Reduced factor:\n");
+		print_factor(reduced_factor);
 		factors.push_back(reduced_factor);
 	}
 	/* For each hidden variable H */
@@ -57,5 +64,5 @@ void process_query_variable_elimination(network& _network,
 	/* Normalize */
 	normalize(result);
 	/* TODO Write to output file*/
-	print_factor(result);
+	//print_factor(result);
 }

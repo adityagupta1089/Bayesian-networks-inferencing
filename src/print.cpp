@@ -3,19 +3,32 @@
 #include <vector>
 
 //=============================================================================
-// FUNCTIONS
+// HEADER
+//=============================================================================
+void print_header(int cnt) {
+	printf("+");
+	for(int i = 0; i <= cnt; i++) printf("-");
+	printf("+------+\n");
+}
+//=============================================================================
+// PRINT
 //=============================================================================
 void print_factor(factor& _factor) {
 	int total_parents = _factor.parent_ids.size();
 	int rows = 1 << total_parents;
-
+	int cnt = 4 * total_parents - 1;
+	/* Header */
+	print_header(cnt);
+	/* Parent IDS */
 	printf("| ");
-	if (_factor.parent_ids.size() == 0) printf(" X");
 	for (int i = total_parents - 1; i >= 0; i--) {
 		printf("%02d", _factor.parent_ids[i]);
 		if (i != 0) printf(", ");
 	}
-	printf(" | %4s | %4s |\n", "x", "~x");
+	printf(" | %4s |\n","P");
+	/* Header */
+	print_header(cnt);
+	/* Values */
 	for (int i = 0; i < rows; i++) {
 		printf("| ");
 		if (total_parents == 0) printf("  ");
@@ -25,6 +38,8 @@ void print_factor(factor& _factor) {
 				if (k != total_parents - 1) printf(", ");
 			}
 		}
-		printf(" | %1.2f | %1.2f |\n", _factor.matrix[i][0], _factor.matrix[i][1]);
+		printf(" | %1.2f |\n", _factor.matrix[i]);
 	}
+	/* Header */
+	print_header(cnt);
 }

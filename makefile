@@ -3,7 +3,7 @@ SDIR=src
 ODIR=bin
 
 CC=clang++
-CFLAGS=-I$(IDIR) -std=c++11 -Wall -Wextra -pedantic
+CFLAGS=-I$(IDIR) -std=c++11 -Wall -Wextra -pedantic -g
 
 _DEPS = read_write.hpp network.hpp queries.hpp
 DEPS = $(patsubst %, $(IDIR)/%, $(_DEPS))

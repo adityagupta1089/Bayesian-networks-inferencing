@@ -37,11 +37,16 @@ void read_input(char* file_name, network& _network) {
 		int id;
 		iss >> id;
 		id--;
+		/* TODO maybe push id in parents? */
+		_network.nodes[id].cpt.parent_ids.push_back(id);
+		_network.nodes[id].cpt.parent_ids_set.insert(id);
+
 
 		/* Process parent ids */
 		int pid;
 		while (iss >> pid) {
 			pid--;
+			_network.nodes[id].cpt.id = id;
 			_network.nodes[id].cpt.parent_ids.push_back(pid);
 			_network.nodes[id].cpt.parent_ids_set.insert(pid);
 		}
@@ -50,16 +55,15 @@ void read_input(char* file_name, network& _network) {
 		int total_parents = _network.nodes[id].cpt.parent_ids.size();
 		int rows = 1 << total_parents;
 
-		_network.nodes[id].cpt.matrix = new double*[rows];
+		_network.nodes[id].cpt.matrix = new double[rows];
 
-		for (int i = 0; i < rows; i++) {
+		for (int i = 0; i < rows / 2; i++) {
 			std::getline(in, line);
 			std::istringstream iss(line);
-			_network.nodes[id].cpt.matrix[i] = new double[2];
 			/* P(x|parents) */
-			iss >> _network.nodes[id].cpt.matrix[i][0];
+			iss >> _network.nodes[id].cpt.matrix[i];
 			/* P(~x|parents) */
-			iss >> _network.nodes[id].cpt.matrix[i][1];
+			iss >> _network.nodes[id].cpt.matrix[i + rows / 2];
 		}
 	}
 }
