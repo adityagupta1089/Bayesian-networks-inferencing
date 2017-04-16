@@ -69,10 +69,9 @@ void reduce(factor& original, factor& result, std::vector<int>& evidence,
 //=============================================================================
 factor join(factor x, factor y) {
 	factor result;
-	/* TODO is the joint supposed to be only on one variable, i.e. the hidden
-	 * variable? or is it supposed to be done for intersection of parent
-	 * variables? */
-
+	/* TODO Natural Join */
+	/* TODO See https://en.wikipedia.org/wiki/Nested_loop_join and
+	 * https://en.wikipedia.org/wiki/Sort-merge_join */
 	return result;
 }
 
