@@ -2,7 +2,7 @@ IDIR=include
 SDIR=src
 ODIR=bin
 
-CC=g++
+CC=clang++
 CFLAGS=-I$(IDIR) -std=c++11 -Wall -Wextra -pedantic
 
 _DEPS = read_write.hpp network.hpp queries.hpp

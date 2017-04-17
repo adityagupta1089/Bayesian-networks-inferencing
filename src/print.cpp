@@ -1,4 +1,5 @@
 #include <factors.hpp>
+#include <algorithm>
 #include <cstdio>
 #include <vector>
 
@@ -7,7 +8,8 @@
 //=============================================================================
 void print_header(int cnt) {
 	printf("+");
-	for(int i = 0; i <= cnt; i++) printf("-");
+	for (int i = 0; i <= cnt; i++)
+		printf("-");
 	printf("+------+\n");
 }
 //=============================================================================
@@ -16,16 +18,17 @@ void print_header(int cnt) {
 void print_factor(factor& _factor) {
 	int total_parents = _factor.parent_ids.size();
 	int rows = 1 << total_parents;
-	int cnt = 4 * total_parents - 1;
+	int cnt = 4 * std::max(total_parents, 1) - 1;
 	/* Header */
 	print_header(cnt);
 	/* Parent IDS */
 	printf("| ");
+	if (_factor.parent_ids.size() == 0) printf("  ");
 	for (int i = total_parents - 1; i >= 0; i--) {
 		printf("%02d", _factor.parent_ids[i]);
 		if (i != 0) printf(", ");
 	}
-	printf(" | %4s |\n","P");
+	printf(" | %4s |\n", "P");
 	/* Header */
 	print_header(cnt);
 	/* Values */

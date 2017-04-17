@@ -1,7 +1,7 @@
 #ifndef INCLUDE_FACTORS_HPP_
 #define INCLUDE_FACTORS_HPP_
 
-#include <unordered_set>
+#include <set>
 #include <vector>
 
 //=============================================================================
@@ -20,10 +20,11 @@
  * 		... P(~x|~1,~2,~3) }
  */
 struct factor {
-        int id;
+		int id;
+		int len;
 		double* matrix;
 		std::vector<int> parent_ids;
-		std::unordered_set<int> parent_ids_set;
+		std::set<int> parent_ids_set;
 
 		inline bool contains(int id) {
 			return parent_ids_set.find(id) != parent_ids_set.end();
@@ -32,13 +33,8 @@ struct factor {
 //=============================================================================
 // PROTOTYPES
 //=============================================================================
-void reduce(factor& x, std::vector<int>& evidence, factor& result);
-void reduce(factor& x, factor& y, std::vector<int>& evidence,
-		unsigned int begin_x, unsigned int begin_y, unsigned int len_x,
-		unsigned int len_y, unsigned int start_x = 0, unsigned int start_y = 0);
-
+void reduce(factor& original, std::vector<int>& evidence, factor& result);
 factor join(factor x, factor y);
-
 void sum(factor& x, int var);
 void normalize(factor& x);
 
