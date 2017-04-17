@@ -35,11 +35,7 @@ struct factor {
 //=============================================================================
 void reduce(factor& original, std::vector<int>& evidence, factor& result);
 factor join(factor x, factor y);
-
 void sum(factor& x, int var);
-void sum_matrix(factor& original, factor& result, int var,
-		unsigned int begin_x, unsigned int begin_y, unsigned int len_x,
-		unsigned int len_y, unsigned int start_x, unsigned int start_y);
 void normalize(factor& x);
 
 #endif /* INCLUDE_FACTORS_HPP_ */

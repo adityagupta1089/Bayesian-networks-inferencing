@@ -1,8 +1,10 @@
 #include <factors.hpp>
+#include <print.hpp>
 #include <algorithm>
 #include <cstdio>
 #include <cstdlib>
 #include <iterator>
+#include <map>
 #include <utility>
 
 //=============================================================================
@@ -49,16 +51,19 @@ void reduce(factor& original, std::vector<int>& evidence, factor& result) {
 //=============================================================================
 factor join(factor x, factor y) {
 	factor result;
+	//printf("Joining: \n");
+	//print_factor(x);
+	//print_factor(y);
 	std::set<int> common_parents;
 	std::set_intersection(x.parent_ids_set.begin(), x.parent_ids_set.end(),
 			y.parent_ids_set.begin(), y.parent_ids_set.end(),
 			std::inserter(common_parents, common_parents.end()));
-	if (common_parents.size() > 1) {
-		fprintf(stderr,
-				"NOTE: If more than one parents are there, we need to sort "
-						"common parents amongst themselves also\n");
-		exit(0);
-	}
+	/*if (common_parents.size() > 1) {
+	 fprintf(stderr,
+	 "NOTE: If more than one parents are there, we need to sort "
+	 "common parents amongst themselves also\n");
+	 exit(0);
+	 }*/
 	/* NOTE: Assuming x & y are pass by value so modifying them by sorting */
 
 	/* Creating vector for parent indices */
@@ -102,6 +107,9 @@ factor join(factor x, factor y) {
 		result.parent_ids.push_back(x.parent_ids[i]);
 	for (unsigned int i = common_parents.size(); i < y.parent_ids.size(); i++)
 		result.parent_ids.push_back(y.parent_ids[i]);
+	std::copy(result.parent_ids.begin(), result.parent_ids.end(),
+			std::inserter(result.parent_ids_set,
+					result.parent_ids_set.begin()));
 	/* Join Operation */
 	int common_parents_block = 1 << common_parents.size();
 	int x_block_len = x.len / common_parents_block;
@@ -115,6 +123,8 @@ factor join(factor x, factor y) {
 			}
 		}
 	}
+	//printf("Result: \n");
+	//print_factor(result);
 	return result;
 }
 
@@ -122,46 +132,34 @@ factor join(factor x, factor y) {
 // SUM
 //=============================================================================
 void sum(factor& x, int var) {
-	factor result;
-	result.parent_ids=x.parent_ids;
-	result.parent_ids.erase(std::remove(result.parent_ids.begin(), result.parent_ids.end(), var), result.parent_ids.end());
-	result.matrix=new double[1<<result.parent_ids.size()];
-	sum_matrix(x,result,var,0,0,1<<x.parent_ids.size(),1<<result.parent_ids.size(),0,0);
-	x=result;
-}
-void sum_matrix(factor& original, factor& result, int var,
-		unsigned int begin_x, unsigned int begin_y, unsigned int len_x,
-		unsigned int len_y, unsigned int start_x, unsigned int start_y) {
-	/* No parents of original factor (length = 1), no need to reduce */
-	if (len_x == 1) {
-		result.matrix[begin_y] += original.matrix[begin_x];
-//		printf("%f:%f\n", original.matrix[begin_x],result.matrix[begin_y]);
-		return;
-	}
-	/* Both have parents in the same order so we can compare if both have same
-	 * parent at the corresponding indexes start_x and start_y */
-	if (original.parent_ids[start_x] == var) {
-		/* parent start_x of original factor is not a parent of reduced factor,
-		 * increase start_x (this parent processed) and reduce the corresponding
-		 * part of the table according to the parents' evidence value */
-			/* If true take the upper half */
-			sum_matrix(original, result, var, begin_x, begin_y, len_x / 2,
-					len_y, start_x + 1, start_y);
-			sum_matrix(original, result, var, begin_x + len_x/2, begin_y, len_x / 2,
-					len_y, start_x + 1, start_y);
-		} else {
-			/* If false take the lower half */
-			sum_matrix(original, result, var, begin_x, begin_y, len_x / 2,
-					len_y/2, start_x + 1, start_y + 1);
-			sum_matrix(original, result, var, begin_x + len_x / 2, begin_y + len_y/2,
-					len_x / 2, len_y/2, start_x + 1, start_y + 1);
-		}
-		return;
+	/*unsigned int total_parents = 0;
+	 for (int parent : original.parent_ids) {
+	 if (evidence[parent] == HIDDEN) {
+	 total_parents++;
+	 result.parent_ids.push_back(parent);
+	 result.parent_ids_set.insert(parent);
+	 }
+	 }
+	 int new_len = 1 << total_parents;
+	 result.len = new_len;
+	 result.matrix = new double[new_len];
+	 int res = 0, mask = 0;
+	 for (int parent : original.parent_ids) {
+	 res <<= 1;
+	 mask <<= 1;
+	 if (evidence[parent] == HIDDEN) mask |= 1;
+	 if (evidence[parent] != FALSE) res |= 1;
+	 }
+	 for (int i = original.len - 1, j = 0; i >= 0; i--) {
+	 if ((i | mask) == res) {
+	 result.matrix[j++] = original.matrix[original.len - 1 - i];
+	 }
+	 }*/
 }
 
 //=============================================================================
 // NORMALIZE
 //=============================================================================
 void normalize(factor& x) {
-//TODO
+	//TODO
 }
