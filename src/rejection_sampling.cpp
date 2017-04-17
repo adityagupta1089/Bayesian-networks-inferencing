@@ -11,7 +11,9 @@ struct network;
 //=============================================================================
 // FUNCTIONS
 //=============================================================================
-void process_query_rejection_sampling(network& _network, std::vector<int>& query_variables, std::vector<int>& evidence_variables, std::ofstream& out) {
+void process_query_rejection_sampling(network& _network,
+		std::vector<int>& query_variables, std::vector<int>& evidence_variables,
+		std::ofstream& out) {
 	//TODO
 	/* repeat for SAMPLE_COUNT */
 	{

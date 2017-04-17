@@ -9,7 +9,8 @@
 //=============================================================================
 int main(int argc, char** argv) {
 	if (argc < 4) {
-		printf("Input Format: %s <bayesian network input file> <queries input file> <output file>", argv[0]);
+		printf("Input Format: %s <bayesian network input file> <queries input "
+				"file> <output file>", argv[0]);
 		exit(1);
 	}
 

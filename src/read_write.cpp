@@ -41,7 +41,6 @@ void read_input(char* file_name, network& _network) {
 		_network.nodes[id].cpt.parent_ids.push_back(id);
 		_network.nodes[id].cpt.parent_ids_set.insert(id);
 
-
 		/* Process parent ids */
 		int pid;
 		while (iss >> pid) {
@@ -55,6 +54,7 @@ void read_input(char* file_name, network& _network) {
 		int total_parents = _network.nodes[id].cpt.parent_ids.size();
 		int rows = 1 << total_parents;
 
+		_network.nodes[id].cpt.len = rows;
 		_network.nodes[id].cpt.matrix = new double[rows];
 
 		for (int i = 0; i < rows / 2; i++) {

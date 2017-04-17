@@ -1,12 +1,11 @@
 #include <factors.hpp>
 #include <network.hpp>
-#include <print.hpp>
 #include <algorithm>
-#include <cstdio>
 #include <cstdlib>
 #include <iostream>
 #include <iterator>
 #include <vector>
+#include <print.hpp>
 
 //=============================================================================
 // FORWARD DECLARATIONS
@@ -42,17 +41,6 @@ void process_query_variable_elimination(network& _network,
 	//	print_factor(reduced_factor);
 		factors[i++]=reduced_factor;
 	}
-/* testing...for...sum...
-	for(factor _factor:factors){
-		printf("Original:\n");
-		print_factor(_factor);
-		if(_factor.parent_ids.size()>0){
-			factor result=sum(_factor,_factor.parent_ids[0]);
-			printf("summed:\n");
-			print_factor(result);
-		}else
-			printf("There is no sum\n");
-	}*/
 	/* For each hidden variable H */
 	for (int i = 0; i < _network.total_nodes; i++) {
 		if (evidence[i] == HIDDEN) {
@@ -62,19 +50,17 @@ void process_query_variable_elimination(network& _network,
 				/* Join all factors with H */
 				factor joint_factor = std::accumulate(it + 1, factors.end(),
 						*it, join);
-				factors.erase(it, factors.end());
+					factors.erase(it, factors.end());
 				/* Eliminate/Sum H */
-				sum(joint_factor, i);
-				factors.push_back(joint_factor);
+					sum(joint_factor, i);
+					factors.push_back(joint_factor);
 			}
-
 		}
 	}
 	/* Join all remaining factors */
-	factor result = std::accumulate(factors.begin() + 1, factors.end(),
-			factors[0], join);
+	//	factor result = std::accumulate(factors.begin() + 1, factors.end(), factors[0], join);
 	/* Normalize */
-	normalize(result);
+	//	normalize(result);
 	/* TODO Write to output file*/
-	//print_factor(result);
+	//	print_factor(result);
 }
