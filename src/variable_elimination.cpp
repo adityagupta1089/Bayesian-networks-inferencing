@@ -29,18 +29,30 @@ void process_query_variable_elimination(network& _network,
 	}
 	/* Start with initial factors (Local CPTs instantiated by evidence variable) */
 	std::vector<factor> factors(_network.total_nodes);
+	unsigned int i=0;
 	for (node _node : _network.nodes) {
 		factor reduced_factor;
-		printf("Original factor:\n");
-		print_factor(_node.cpt);
-		printf("Evidence Variables:\n");
-		for(int x:evidence_variables)std::cout << (x<0?"-":" ") << abs(x)-1 <<", ";
-		std::cout << "\n";
+//		printf("Original factor:\n");
+	//	print_factor(_node.cpt);
+		//printf("Evidence Variables:\n");
+//		for(int x:evidence_variables)std::cout << (x<0?"-":" ") << abs(x)-1 <<", ";
+	//	std::cout << "\n";
 		reduce(_node.cpt, evidence, reduced_factor);
-		printf("Reduced factor:\n");
-		print_factor(reduced_factor);
-		factors.push_back(reduced_factor);
+//		printf("Reduced factor:\n");
+	//	print_factor(reduced_factor);
+		factors[i++]=reduced_factor;
 	}
+/* testing...for...sum...
+	for(factor _factor:factors){
+		printf("Original:\n");
+		print_factor(_factor);
+		if(_factor.parent_ids.size()>0){
+			factor result=sum(_factor,_factor.parent_ids[0]);
+			printf("summed:\n");
+			print_factor(result);
+		}else
+			printf("There is no sum\n");
+	}*/
 	/* For each hidden variable H */
 	for (int i = 0; i < _network.total_nodes; i++) {
 		if (evidence[i] == HIDDEN) {
