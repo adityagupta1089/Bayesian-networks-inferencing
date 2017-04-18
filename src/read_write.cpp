@@ -70,9 +70,7 @@ void read_input(char* file_name, network& _network) {
 //=============================================================================
 // WRITE
 //=============================================================================
-void write_output(factor& _factor, char* file_name) {
-	std::ofstream out;
-	out.open(file_name);
+void write_output(factor& _factor, std::ofstream& out) {
 	if (out.is_open()) {
 		//TODO
 	} else {

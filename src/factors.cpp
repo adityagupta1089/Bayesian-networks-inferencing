@@ -2,13 +2,12 @@
 #include <print.hpp>
 #include <algorithm>
 #include <cstdio>
-#include <cstdlib>
 #include <iterator>
 #include <map>
 #include <utility>
 
 //=============================================================================
-// NIFTY SHORTHAND
+// MINOR FUNCTIONS
 //=============================================================================
 #define contains(set, val) (set.find(val) != set.end())
 
@@ -23,7 +22,7 @@ struct factor;
 void reduce(factor& original, std::vector<int>& evidence, factor& result) {
 	unsigned int total_parents = 0;
 	for (int parent : original.parent_ids) {
-		if (evidence[parent] == HIDDEN) {
+		if (evidence[parent] == HIDDEN || evidence[parent] == NONE) {
 			total_parents++;
 			result.parent_ids.push_back(parent);
 			result.parent_ids_set.insert(parent);
@@ -36,7 +35,7 @@ void reduce(factor& original, std::vector<int>& evidence, factor& result) {
 	for (int parent : original.parent_ids) {
 		res <<= 1;
 		mask <<= 1;
-		if (evidence[parent] == HIDDEN) mask |= 1;
+		if (evidence[parent] == HIDDEN || evidence[parent] == NONE) mask |= 1;
 		if (evidence[parent] != FALSE) res |= 1;
 	}
 	for (int i = original.len - 1, j = 0; i >= 0; i--) {
@@ -51,55 +50,22 @@ void reduce(factor& original, std::vector<int>& evidence, factor& result) {
 //=============================================================================
 factor join(factor x, factor y) {
 	factor result;
-	//printf("Joining: \n");
-	//print_factor(x);
-	//print_factor(y);
 	std::set<int> common_parents;
 	std::set_intersection(x.parent_ids_set.begin(), x.parent_ids_set.end(),
 			y.parent_ids_set.begin(), y.parent_ids_set.end(),
 			std::inserter(common_parents, common_parents.end()));
-	/*if (common_parents.size() > 1) {
-	 fprintf(stderr,
-	 "NOTE: If more than one parents are there, we need to sort "
-	 "common parents amongst themselves also\n");
-	 exit(0);
-	 }*/
-	/* NOTE: Assuming x & y are pass by value so modifying them by sorting */
-
-	/* Creating vector for parent indices */
-	std::vector<int> indices_x;
-	for (int i = 0; i < x.len; i++)
-		indices_x.push_back(i);
-
-	std::vector<int> indices_y;
-	for (int i = 0; i < y.len; i++)
-		indices_y.push_back(i);
 	/* Creating masks */
-	int mask_x = 0;
-	int mask_y = 0;
-	for (int parent : x.parent_ids) {
-		mask_x <<= 1;
-		if (!contains(common_parents, parent)) mask_x |= 1;
+	std::map<int, int> weights;
+	int v = 1;
+	for (auto it = common_parents.rbegin(); it != common_parents.rend(); it++) {
+		weights[*it] = v;
+		v <<= 1;
 	}
-	for (int parent : y.parent_ids) {
-		mask_y <<= 1;
-		if (!contains(common_parents, parent)) mask_y |= 1;
-	}
-	/* sorting parents */
-	std::stable_partition(x.parent_ids.begin(), x.parent_ids.end(),
-			[=](int i) {return contains(common_parents, i);});
-	std::stable_partition(y.parent_ids.begin(), y.parent_ids.end(),
-			[=](int i) {return contains(common_parents, i);});
 	/* Sorting Tables */
-	std::sort(indices_x.begin(), indices_x.end(),
-			[=](int a, int b) {return (a | mask_x) < (b | mask_x);});
-	std::sort(indices_y.begin(), indices_y.end(),
-			[=](int a, int b) {return (a | mask_y) < (b | mask_y);});
-	/* Size of Matrix */
-	result.len = 1
-			<< (x.parent_ids.size() + y.parent_ids.size()
-					- common_parents.size());
-	result.matrix = new double[result.len];
+	std::vector<int> indices_x;
+	std::vector<int> indices_y;
+	sort_table(x, common_parents, weights, indices_x);
+	sort_table(y, common_parents, weights, indices_y);
 	/* New parents */
 	std::copy(common_parents.begin(), common_parents.end(),
 			std::back_inserter(result.parent_ids));
@@ -110,6 +76,11 @@ factor join(factor x, factor y) {
 	std::copy(result.parent_ids.begin(), result.parent_ids.end(),
 			std::inserter(result.parent_ids_set,
 					result.parent_ids_set.begin()));
+	/* Size of Matrix */
+	result.len = 1
+			<< (x.parent_ids.size() + y.parent_ids.size()
+					- common_parents.size());
+	result.matrix = new double[result.len];
 	/* Join Operation */
 	int common_parents_block = 1 << common_parents.size();
 	int x_block_len = x.len / common_parents_block;
@@ -123,43 +94,76 @@ factor join(factor x, factor y) {
 			}
 		}
 	}
-	//printf("Result: \n");
-	//print_factor(result);
 	return result;
+}
+
+void sort_table(factor& x, std::set<int>& common_parents,
+		std::map<int, int>& weights, std::vector<int>& indices_x) {
+	/* Creating vector for parent indices */
+	for (int i = 0; i < x.len; i++)
+		indices_x.push_back(i);
+	/* Sorting Tables */
+	std::sort(indices_x.begin(), indices_x.end(),
+			[&](int a,int b) {return parent_compare(a, b, x.parent_ids, weights);});
+	/* Sorting parents */
+	std::stable_partition(x.parent_ids.begin(), x.parent_ids.end(),
+			[=](int i) {return contains(common_parents, i);});
+	/* Sorting common parents */
+	std::sort(x.parent_ids.begin(),
+			x.parent_ids.begin() + common_parents.size());
+
+}
+
+bool parent_compare(int a, int b, std::vector<int>& parents,
+		std::map<int, int>& weights) {
+	int va = 0, vb = 0;
+	for (auto it = parents.rbegin(); it != parents.rend(); it++) {
+		if (contains(weights, *it)) {
+			/* Common parents */
+			va += (a & 1) * weights[*it];
+			vb += (b & 1) * weights[*it];
+		}
+		a >>= 1;
+		b >>= 1;
+	}
+	if (va == vb) {
+		for (auto it = parents.begin(); it != parents.end() && va == vb; it++) {
+			if (!contains(weights, *it)) {
+				/* Now other parents */
+				va <<= 1;
+				vb <<= 1;
+				va += (a & 1);
+				vb += (b & 1);
+			}
+		}
+	}
+	return va < vb;
 }
 
 //=============================================================================
 // SUM
 //=============================================================================
 void sum(factor& x, int var) {
-	/*unsigned int total_parents = 0;
-	 for (int parent : original.parent_ids) {
-	 if (evidence[parent] == HIDDEN) {
-	 total_parents++;
-	 result.parent_ids.push_back(parent);
-	 result.parent_ids_set.insert(parent);
-	 }
-	 }
-	 int new_len = 1 << total_parents;
-	 result.len = new_len;
-	 result.matrix = new double[new_len];
-	 int res = 0, mask = 0;
-	 for (int parent : original.parent_ids) {
-	 res <<= 1;
-	 mask <<= 1;
-	 if (evidence[parent] == HIDDEN) mask |= 1;
-	 if (evidence[parent] != FALSE) res |= 1;
-	 }
-	 for (int i = original.len - 1, j = 0; i >= 0; i--) {
-	 if ((i | mask) == res) {
-	 result.matrix[j++] = original.matrix[original.len - 1 - i];
-	 }
-	 }*/
+	auto pos = find(x.parent_ids.begin(), x.parent_ids.end(), var);
+	int delta = 1 << (x.parent_ids.size() - 1 - (pos - x.parent_ids.begin()));
+	x.len >>= 1;
+	double* new_matrix = new double[x.len];
+	for (int i = 0, j = 0; i < delta; i += 2 * delta) {
+		for (int k = i; k < i + delta; k++) {
+			new_matrix[j++] = x.matrix[k] + x.matrix[k + delta];
+		}
+	}
+	x.parent_ids.erase(pos);
+	x.parent_ids_set.erase(var);
+	delete[] x.matrix;
+	x.matrix = new_matrix;
 }
 
 //=============================================================================
 // NORMALIZE
 //=============================================================================
 void normalize(factor& x) {
-	//TODO
+	double sum = std::accumulate(x.matrix, x.matrix + x.len, 0.0);
+	for (int i = 0; i < x.len; i++)
+		x.matrix[i] /= sum;
 }
