@@ -60,6 +60,6 @@ void process_query_variable_elimination(network& _network,
 			factors[0], join);
 	/* Normalize */
 	normalize(result);
-	/* TODO Write to output file*/
-	write_output(result, out);
+	/* Write to output file*/
+	write_output(result, query_variables, out);
 }

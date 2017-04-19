@@ -10,6 +10,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <map>
 
 //=============================================================================
 // FORWARD DECLARATIONS
@@ -37,7 +38,6 @@ void read_input(char* file_name, network& _network) {
 		int id;
 		iss >> id;
 		id--;
-		/* TODO maybe push id in parents? */
 		_network.nodes[id].cpt.parent_ids.push_back(id);
 		_network.nodes[id].cpt.parent_ids_set.insert(id);
 
@@ -70,11 +70,22 @@ void read_input(char* file_name, network& _network) {
 //=============================================================================
 // WRITE
 //=============================================================================
-void write_output(factor& _factor, std::ofstream& out) {
+void write_output(factor& _factor, std::vector<int>& query_variables,
+		std::ofstream& out) {
 	if (out.is_open()) {
-		//TODO
+		std::map<int, bool> sign;
+		for (int x : query_variables)
+			sign[abs(x) - 1] = x > 0;
+		int ind = 0;
+		for (auto it = _factor.parent_ids.rbegin();
+				it != _factor.parent_ids.rend(); it++) {
+			ind <<= 1;
+			ind |= sign[*it] ? 0 : 1;
+		}
+		out << _factor.matrix[ind] << "\n";
 	} else {
-		printf("Couldn't open output file\n");
+		fprintf(stderr, "Couldn't open output file\n");
+		exit(0);
 	}
 }
 #endif /*READ_WRITE_CPP*/
