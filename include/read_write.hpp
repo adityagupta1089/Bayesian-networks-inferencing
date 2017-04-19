@@ -15,5 +15,5 @@ struct factor;
 void read_input(char* file_name, network& _network);
 void write_output(factor& _factor, std::vector<int>& query_variables,
 		std::ofstream& out);
-void T_SORT(network& _network);
+void topological_sort(network& _network);
 #endif /* INCLUDE_READ_WRITE_HPP_ */

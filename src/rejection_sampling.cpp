@@ -1,10 +1,11 @@
-#include <iostream>
-#include <vector>
 #include <factors.hpp>
 #include <network.hpp>
-#include <print.hpp>
 #include <read_write.hpp>
 #include <algorithm>
+#include <cstdlib>
+#include <iostream>
+#include <iterator>
+#include <vector>
 
 #define SAMPLE_COUNT 1000000
 
@@ -43,11 +44,13 @@ void process_query_rejection_sampling(network& _network,
 		/* for each node x_i in the querty, Topologically sorted */
 		for (int x_i : _network.ids) {
 			index = 0;
+			/* Constructing Index */
 			for (int i : _network.nodes[x_i].cpt.parent_ids) {
 				if (i == x_i) continue;
 				index <<= 1;
 				index |= values[i];
 			}
+			/* Using sample value */
 			if (sample < _network.nodes[x_i].cpt.matrix[index]) {
 				if (evidence[x_i] == FALSE) {
 					values[x_i] = 1;
@@ -67,6 +70,7 @@ void process_query_rejection_sampling(network& _network,
 			}
 		}
 		if (reject) continue;
+		/* Final value */
 		index = 0;
 		for (int x_i : query_variables) {
 			index <<= 1;
@@ -75,6 +79,7 @@ void process_query_rejection_sampling(network& _network,
 		result.matrix[index]++;
 	}
 	delete[] values;
+	/* Averaging Values */
 	for (unsigned int i = 0; i < result.len; i++)
 		result.matrix[i] /= SAMPLE_COUNT;
 	write_output(result, query_variables, out);

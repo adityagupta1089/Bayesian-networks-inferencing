@@ -68,31 +68,36 @@ void read_input(char* file_name, network& _network) {
 			iss >> _network.nodes[id].cpt.matrix[i + rows / 2];
 		}
 	}
-	T_SORT(_network);
+
+	topological_sort(_network);
 }
-void T_SORT(network &_network){
-	std::vector<int> L;
-	std::stack<int> S;
+
+void topological_sort(network &_network) {
+	/* Empty list that will contain the sorted elements */
+	std::vector<int> sorted_elements;
+	/* nodes without an incoming edge */
+	std::stack<int> nodes;
 	std::set<int>* parents = new std::set<int>[_network.total_nodes];
-	for(int i:_network.ids){
-		if(_network.nodes[i].cpt.len==2)
-			S.push(i);
-			parents[i]=_network.nodes[i].cpt.parent_ids_set;
+	for (int i : _network.ids) {
+		if (_network.nodes[i].cpt.len == 2) nodes.push(i);
+		parents[i] = _network.nodes[i].cpt.parent_ids_set;
 	}
-while (S.size()){
-		int n=S.top();
-		S.pop();
-		L.push_back(n);
-    for(int i:_network.nodes[n].cpt.child_ids){
+	while (nodes.size()) {
+		int n = nodes.top();
+		nodes.pop();
+		sorted_elements.push_back(n);
+		for (int i : _network.nodes[n].cpt.child_ids) {
 			parents[i].erase(n);
-      if(parents[i].size()==1){
-        S.push(i);
+			if (parents[i].size() == 1) {
+				nodes.push(i);
 			}
 		}
 	}
 	delete[] parents;
-	_network.ids=L;
-}//=============================================================================
+	_network.ids = sorted_elements;
+}
+
+//=============================================================================
 // WRITE
 //=============================================================================
 void write_output(factor& _factor, std::vector<int>& query_variables,
