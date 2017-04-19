@@ -54,7 +54,7 @@ factor join(factor x, factor y) {
 	std::set_intersection(x.parent_ids_set.begin(), x.parent_ids_set.end(),
 			y.parent_ids_set.begin(), y.parent_ids_set.end(),
 			std::inserter(common_parents, common_parents.end()));
-	/* Creating masks */
+	/* Creating weight */
 	std::map<int, int> weights;
 	int v = 1;
 	for (auto it = common_parents.rbegin(); it != common_parents.rend(); it++) {
@@ -146,7 +146,7 @@ bool parent_compare(int a, int b, std::vector<int>& parents,
 void sum(factor& x, int var) {
 	auto pos = find(x.parent_ids.begin(), x.parent_ids.end(), var);
 	int delta = 1 << (x.parent_ids.size() - 1 - (pos - x.parent_ids.begin()));
-	x.len >>= 1;
+	x.len /= 2;
 	double* new_matrix = new double[x.len];
 	for (int i = 0, j = 0; i < delta; i += 2 * delta) {
 		for (int k = i; k < i + delta; k++) {
