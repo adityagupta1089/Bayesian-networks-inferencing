@@ -103,7 +103,7 @@ void sort_table(factor& x, std::set<int>& common_parents,
 	for (int i = 0; i < x.len; i++)
 		indices_x.push_back(i);
 	/* Sorting Tables */
-	std::sort(indices_x.begin(), indices_x.end(),
+	std::stable_sort(indices_x.begin(), indices_x.end(),
 			[&](int a,int b) {return parent_compare(a, b, x.parent_ids, weights);});
 	/* Sorting parents */
 	std::stable_partition(x.parent_ids.begin(), x.parent_ids.end(),
