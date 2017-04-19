@@ -13,6 +13,7 @@ struct node {
 
 struct network {
 		int total_nodes;
+		std::vector<int> ids;
 		std::vector<node> nodes;
 };
 

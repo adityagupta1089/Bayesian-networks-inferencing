@@ -148,7 +148,7 @@ void sum(factor& x, int var) {
 	int delta = 1 << (x.parent_ids.size() - 1 - (pos - x.parent_ids.begin()));
 	x.len >>= 1;
 	double* new_matrix = new double[x.len];
-	for (int i = 0, j = 0; i < delta; i += 2 * delta) {
+	for (int i = 0, j = 0; i < 2*x.len; i += 2*delta) {
 		for (int k = i; k < i + delta; k++) {
 			new_matrix[j++] = x.matrix[k] + x.matrix[k + delta];
 		}

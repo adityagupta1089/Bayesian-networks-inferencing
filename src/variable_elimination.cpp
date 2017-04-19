@@ -10,7 +10,7 @@
 #include <numeric>
 #include <vector>
 
-#define DEBUG true
+#define DEBUG false
 
 //=============================================================================
 // FORWARD DECLARATIONS
@@ -83,7 +83,9 @@ void process_query_variable_elimination(network& _network,
 					printf("Summed variable %d\n", i);
 					print_factor(joint_factor);
 				}
-				factors.push_back(joint_factor);
+				if (joint_factor.parent_ids.size() > 0) {
+					factors.push_back(joint_factor);
+				}
 			}
 		}
 	}
@@ -106,5 +108,5 @@ void process_query_variable_elimination(network& _network,
 		print_factor(result);
 	}
 	/* TODO Write to output file*/
-	write_output(result, out);
+	write_output(result, out,0);
 }

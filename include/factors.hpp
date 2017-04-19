@@ -22,6 +22,8 @@ struct factor {
 		double* matrix;
 		std::vector<int> parent_ids;
 		std::set<int> parent_ids_set;
+		std::set<int> predecessors;
+		std::vector<int> child_ids;
 
 		inline bool contains(int id) {
 			return parent_ids_set.find(id) != parent_ids_set.end();
