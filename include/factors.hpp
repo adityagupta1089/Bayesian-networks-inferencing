@@ -18,7 +18,7 @@
 //=============================================================================
 struct factor {
 		int id;
-		int len;
+		unsigned int len;
 		double* matrix;
 		std::vector<int> parent_ids;
 		std::set<int> parent_ids_set;
@@ -37,7 +37,7 @@ void reduce(factor& original, std::vector<int>& evidence, factor& result);
 bool parent_compare(int a, int b, std::vector<int>& parents,
 		std::map<int, int>& weights);
 void sort_table(factor& x, std::set<int>& common_parents,
-		std::map<int, int>& weights, std::vector<int>& indices_x);
+		std::map<int, int>& weights, std::vector<unsigned int>& indices_x);
 factor join(factor x, factor y);
 
 void sum(factor& x, int var);

@@ -9,6 +9,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
+#include <stack>
 
 //=============================================================================
 // FORWARD DECLARATIONS
@@ -36,7 +38,6 @@ void read_input(char* file_name, network& _network) {
 		int id;
 		iss >> id;
 		id--;
-		/* TODO maybe push id in parents? */
 		_network.nodes[id].cpt.parent_ids.push_back(id);
 		_network.nodes[id].cpt.parent_ids_set.insert(id);
 		_network.ids.push_back(id);
@@ -71,39 +72,45 @@ void read_input(char* file_name, network& _network) {
 }
 void T_SORT(network &_network){
 	std::vector<int> L;
-	std::vector<int> S;
-	std::set<int> parents[_network.total_nodes];
-	int i;
-	for(i:_network.ids){
+	std::stack<int> S;
+	std::set<int>* parents = new std::set<int>[_network.total_nodes];
+	for(int i:_network.ids){
 		if(_network.nodes[i].cpt.len==2)
-			S.push_back(i);
+			S.push(i);
 			parents[i]=_network.nodes[i].cpt.parent_ids_set;
 	}
 while (S.size()){
-		n=S.pop_back();
+		int n=S.top();
+		S.pop();
 		L.push_back(n);
-    for(i:_network.nodes[n].cpt.child_ids){
-			parents[i].remove(n);
+    for(int i:_network.nodes[n].cpt.child_ids){
+			parents[i].erase(n);
       if(parents[i].size()==1){
-        S.push_back(i);
+        S.push(i);
 			}
 		}
 	}
+	delete[] parents;
 	_network.ids=L;
 }//=============================================================================
 // WRITE
 //=============================================================================
-void write_output(factor& _factor, std::ofstream& out, int teq) {
-	if(teq){
-		printf("FROM REJECTION_SAMPLING:\n");
-	}else{
-		printf("FROM VARIABLE_ELIMINATION:\n");
-	}
-	print_factor(_factor);
+void write_output(factor& _factor, std::vector<int>& query_variables,
+		std::ofstream& out) {
 	if (out.is_open()) {
-		//TODO
+		std::map<int, bool> sign;
+		for (int x : query_variables)
+			sign[abs(x) - 1] = x > 0;
+		int ind = 0;
+		for (auto it = _factor.parent_ids.rbegin();
+				it != _factor.parent_ids.rend(); it++) {
+			ind <<= 1;
+			ind |= sign[*it] ? 0 : 1;
+		}
+		out << _factor.matrix[ind] << "\n";
 	} else {
-		printf("Couldn't open output file\n");
+		fprintf(stderr, "Couldn't open output file\n");
+		exit(0);
 	}
 }
 #endif /*READ_WRITE_CPP*/

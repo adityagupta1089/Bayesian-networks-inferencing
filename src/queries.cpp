@@ -34,8 +34,7 @@ void process_queries(char* input_file_name, network& _network,
 	std::ofstream out;
 	out.open(output_file_name);
 	std::string line;
-	char variable_type;
-	int iter=0;
+	char variable_type=' ';
 	while (std::getline(in, line)) {
 		std::vector<int> query_variables;
 		std::vector<int> evidence_variables;
@@ -58,9 +57,9 @@ void process_queries(char* input_file_name, network& _network,
 						variable);
 			}
 		}
-//		if (inference_technique.compare(VARIABLE_ELIMINATION) == 0)*/ process_query_variable_elimination(
-	//			_network, query_variables, evidence_variables, out);
-		/*else if (inference_technique.compare(REJECTION_SAMPLING) == 0)*/ process_query_rejection_sampling(
+		if (inference_technique.compare(VARIABLE_ELIMINATION) == 0) process_query_variable_elimination(
+				_network, query_variables, evidence_variables, out);
+		else if (inference_technique.compare(REJECTION_SAMPLING) == 0) process_query_rejection_sampling(
 				_network, query_variables, evidence_variables, out);
 	}
 }

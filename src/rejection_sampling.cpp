@@ -25,7 +25,7 @@ void process_query_rejection_sampling(network& _network,
 	}
 	_factor.len=1<<_factor.parent_ids.size();
 	_factor.matrix=new double[_factor.len];
-	unsigned int values[_network.total_nodes];
+	unsigned int* values = new unsigned int[_network.total_nodes];
 	/* Processing Values of evidence variables */
 	std::vector<int> evidence(_network.total_nodes);
 	std::fill(evidence.begin(), evidence.begin() + _network.total_nodes,
@@ -48,29 +48,32 @@ void process_query_rejection_sampling(network& _network,
 				index<<=1;
 				index|=values[i];
 			}
-			if(index>_network.nodes[x_i].cpt.len){
-				printf("%d,%d\n", x_i,index);
-				return;
-			}
+//			if(index>_network.nodes[x_i].cpt.len){
+//				printf("%d,%d\n", x_i,index);
+	//			return;
+		//	}
 			if(sample<_network.nodes[x_i].cpt.matrix[index]){
 				if(evidence[x_i]==FALSE){
 					reject=true;
+					values[x_i]=1;
+//					printf("%d:FALSE\n", x_i);
 					break;
 				}
 				values[x_i]=0;
-				sample/=_network.nodes[x_i].cpt.matrix[index];
+				sample=rand()/(double)RAND_MAX;
 			}else{
 				if(evidence[x_i]==TRUE){
+					values[x_i]=0;
 					reject=true;
 					break;
 				}
 				values[x_i]=1;
-				sample-=_network.nodes[x_i].cpt.matrix[index];
-				sample/=(1-_network.nodes[x_i].cpt.matrix[index]);
+				sample=rand()/(double)RAND_MAX;
 			}
 		}
-		if(reject)
+		if(reject){
 			continue;
+		}
 		index=0;
 		for(int x_i:query_variables){
 			index<<=1;
@@ -79,9 +82,10 @@ void process_query_rejection_sampling(network& _network,
 		_factor.matrix[index]++;
 		count++;
 	}
-	for(int i=0;i<_factor.len;i++){
+	delete[] values;
+	for(unsigned int i=0;i<_factor.len;i++){
 		_factor.matrix[i]/=count;
 	}
-	write_output(_factor, out,1);
+	write_output(_factor, query_variables, out);
 	/* calculate probability for given query */
 }

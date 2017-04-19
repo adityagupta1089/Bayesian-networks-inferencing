@@ -54,7 +54,7 @@ factor join(factor x, factor y) {
 	std::set_intersection(x.parent_ids_set.begin(), x.parent_ids_set.end(),
 			y.parent_ids_set.begin(), y.parent_ids_set.end(),
 			std::inserter(common_parents, common_parents.end()));
-	/* Creating masks */
+	/* Creating weight */
 	std::map<int, int> weights;
 	int v = 1;
 	for (auto it = common_parents.rbegin(); it != common_parents.rend(); it++) {
@@ -62,8 +62,8 @@ factor join(factor x, factor y) {
 		v <<= 1;
 	}
 	/* Sorting Tables */
-	std::vector<int> indices_x;
-	std::vector<int> indices_y;
+	std::vector<unsigned int> indices_x;
+	std::vector<unsigned int> indices_y;
 	sort_table(x, common_parents, weights, indices_x);
 	sort_table(y, common_parents, weights, indices_y);
 	/* New parents */
@@ -98,12 +98,12 @@ factor join(factor x, factor y) {
 }
 
 void sort_table(factor& x, std::set<int>& common_parents,
-		std::map<int, int>& weights, std::vector<int>& indices_x) {
+		std::map<int, int>& weights, std::vector<unsigned int>& indices_x) {
 	/* Creating vector for parent indices */
-	for (int i = 0; i < x.len; i++)
+	for (unsigned i = 0; i < x.len; i++)
 		indices_x.push_back(i);
 	/* Sorting Tables */
-	std::sort(indices_x.begin(), indices_x.end(),
+	std::stable_sort(indices_x.begin(), indices_x.end(),
 			[&](int a,int b) {return parent_compare(a, b, x.parent_ids, weights);});
 	/* Sorting parents */
 	std::stable_partition(x.parent_ids.begin(), x.parent_ids.end(),
@@ -146,10 +146,10 @@ bool parent_compare(int a, int b, std::vector<int>& parents,
 void sum(factor& x, int var) {
 	auto pos = find(x.parent_ids.begin(), x.parent_ids.end(), var);
 	int delta = 1 << (x.parent_ids.size() - 1 - (pos - x.parent_ids.begin()));
-	x.len >>= 1;
+	x.len /= 2;
 	double* new_matrix = new double[x.len];
-	for (int i = 0, j = 0; i < 2*x.len; i += 2*delta) {
-		for (int k = i; k < i + delta; k++) {
+	for (unsigned int i = 0, j = 0; i < 2*x.len; i += 2*delta) {
+		for (unsigned int k = i; k < i + delta; k++) {
 			new_matrix[j++] = x.matrix[k] + x.matrix[k + delta];
 		}
 	}
@@ -164,6 +164,6 @@ void sum(factor& x, int var) {
 //=============================================================================
 void normalize(factor& x) {
 	double sum = std::accumulate(x.matrix, x.matrix + x.len, 0.0);
-	for (int i = 0; i < x.len; i++)
+	for (unsigned int i = 0; i < x.len; i++)
 		x.matrix[i] /= sum;
 }

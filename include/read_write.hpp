@@ -13,6 +13,7 @@ struct factor;
 // PROTOTYPES
 //=============================================================================
 void read_input(char* file_name, network& _network);
-void write_output(factor& _factor, std::ofstream& out, int teq);
-void setpredecessors(int id,network& _network);
+void write_output(factor& _factor, std::vector<int>& query_variables,
+		std::ofstream& out);
+void T_SORT(network& _network);
 #endif /* INCLUDE_READ_WRITE_HPP_ */
