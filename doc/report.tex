@@ -19,13 +19,14 @@ Milan Chaudhary
 \section{Variable Elimination}
 
 \section{Rejection Sampling}
-
+In this section of program, it will  n
 \subsection{Convergence of the probabilities as function of\\ number of samples generated}
 \begin{tikzpicture}
     \datavisualization [scientific axes,
-    						 x axis={logarithmic,length=12cm,label=\texttt{SAMPLE\_COUNT}},
-     						 y axis={logarithmic,length=5cm,label=Percentage Error},
-    						 visualize as smooth line]
+    						 x axis={logarithmic,length=12cm,label=\texttt{SAMPLE\_COUNT},grid},
+     						 y axis={logarithmic,length=5cm,label=Average Percentage Error,grid},
+    						 visualize as smooth line=my data,
+    						 my data={style={mark=x}}]
     data {
         x, y
         1, 120
