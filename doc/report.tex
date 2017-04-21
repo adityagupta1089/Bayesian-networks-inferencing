@@ -42,27 +42,26 @@ This process will be done iteratively for a long finite time. In this process re
 The conditional probability of query variables are calculated using the non-rejected number of iterations and number of occurrences of the different values of query variables, which will be stored as a table representing probabilities of all possible value pairs of query variables.
 Then it will just pick the given value pair of query variables, which is the answer of input query.
 
-Note: If the evidence value collection is not possible it will answer "These evidences can't occur at the same time, i.e. P(e) = 0, thus \(P(Q|e)\) is undefined"
+Note: If the evidence value collection is not possible it will answer ``These evidences don't occur at the same time, i.e. P(e) = 0, thus \(P(Q|e)\) is undefined''
 as
 \[P(Q|e)=\frac{P(Q,e)}{P(e)}\]
-where P(Q,e) and P(e) are 0.
+where $P(Q,e)$ and $P(e)$ are $0$.
 
 \subsection{Convergence of the probabilities as function of\\ number of samples generated}
 \begin{tikzpicture}
     \datavisualization [scientific axes,
-    						 x axis={logarithmic,length=12cm,label=\texttt{SAMPLE\_COUNT},grid},
-     						 y axis={logarithmic,length=3cm,label=Average Percentage Error,grid},
+    						 x axis={logarithmic,length=12cm,label=Value of \texttt{SAMPLE\_COUNT},grid},
+     						 y axis={logarithmic,length=11cm,label=Total(Sum of) Error(s) in all Rejection Sampling Cases,grid},
     						 visualize as smooth line=my data,
     						 my data={style={mark=x}}]
     data {
         x, y
-        1, 120
-        10, 53
-        100, 15
-        1000, 13.5
-        10000, 6.5
-        100000, 2.125
-        1000000, 1.2
+        10, 1.056972
+        100, 0.353125
+        1000, 0.085168
+        10000, 0.022263
+        100000, 0.005043
+        1000000, 0.0010175
     };
 \end{tikzpicture}
 

@@ -1,9 +1,4 @@
-The evedences are not possible to occure at the same time.
-0.3
-0.500039
-0.899964
-0.440559
-0.00051
+0.500025
+0.9
+0.0005
 0
-0
-1

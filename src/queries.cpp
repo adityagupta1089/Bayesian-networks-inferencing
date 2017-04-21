@@ -1,5 +1,5 @@
-//#ifndef QUERIES_CPP
-//#define QUERIES_CPP
+#ifndef QUERIES_CPP
+#define QUERIES_CPP
 
 #include <queries.hpp>
 #include <read_write.hpp>
@@ -34,7 +34,7 @@ void process_queries(char* input_file_name, network& _network,
 	std::ofstream out;
 	out.open(output_file_name);
 	std::string line;
-	char variable_type=' ';
+	char variable_type = ' ';
 	while (std::getline(in, line)) {
 		std::vector<int> query_variables;
 		std::vector<int> evidence_variables;
@@ -64,4 +64,4 @@ void process_queries(char* input_file_name, network& _network,
 	}
 }
 
-//#endif /*QUERIES_CPP*/
+#endif /*QUERIES_CPP*/
