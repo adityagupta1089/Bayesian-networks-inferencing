@@ -1,8 +1,9 @@
 #include <factors.hpp>
 #include <algorithm>
 #include <cstdio>
-#include <string>
 #include <stack>
+#include <string>
+#include <vector>
 
 //=============================================================================
 // HEADER

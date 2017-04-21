@@ -1,9 +1,7 @@
 #include <factors.hpp>
-#include <print.hpp>
 #include <algorithm>
-#include <cstdio>
 #include <iterator>
-#include <map>
+#include <numeric>
 #include <utility>
 
 //=============================================================================
@@ -148,7 +146,7 @@ void sum(factor& x, int var) {
 	int delta = 1 << (x.parent_ids.size() - 1 - (pos - x.parent_ids.begin()));
 	x.len /= 2;
 	double* new_matrix = new double[x.len];
-	for (unsigned int i = 0, j = 0; i < 2*x.len; i += 2*delta) {
+	for (unsigned int i = 0, j = 0; i < 2 * x.len; i += 2 * delta) {
 		for (unsigned int k = i; k < i + delta; k++) {
 			new_matrix[j++] = x.matrix[k] + x.matrix[k + delta];
 		}

@@ -1,5 +1,6 @@
 #include <factors.hpp>
 #include <network.hpp>
+#include <print.hpp>
 #include <read_write.hpp>
 #include <algorithm>
 #include <cstdlib>
@@ -82,8 +83,7 @@ void process_query_rejection_sampling(network& _network,
 	}
 	delete[] values;
 	if (count == 0) {
-		out << "These evidences can't occur at the same time,"
-				" i.e. P(e) = 0, thus P(Q|e) is undefined.\n";
+		out << UNDEFINED;
 		return;
 	}
 	/* Averaging Values */

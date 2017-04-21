@@ -2,11 +2,8 @@
 #define QUERIES_CPP
 
 #include <queries.hpp>
-#include <read_write.hpp>
 #include <cstdlib>
 #include <string>
-#include <vector>
-#include <iostream>
 
 //=============================================================================
 // CONSTANTS

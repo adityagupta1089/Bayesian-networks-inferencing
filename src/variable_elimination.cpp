@@ -3,7 +3,6 @@
 #include <print.hpp>
 #include <read_write.hpp>
 #include <algorithm>
-#include <cstdio>
 #include <cstdlib>
 #include <iostream>
 #include <iterator>
@@ -34,9 +33,14 @@ void process_query_variable_elimination(network& _network,
 	for (node _node : _network.nodes) {
 		factor reduced_factor;
 		reduce(_node.cpt, evidence, reduced_factor);
-		/* Only push if it's not a constant */
 		if (reduced_factor.parent_ids.size() > 0) {
+			/* Only push if it's not a constant */
 			factors.push_back(reduced_factor);
+		} else {
+			if (reduced_factor.matrix[0] == 0) {
+				out << UNDEFINED;
+				return;
+			}
 		}
 	}
 	/* For each hidden variable H */
