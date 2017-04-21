@@ -21,7 +21,7 @@ void process_query_rejection_sampling(network& _network,
 		std::vector<int>& query_variables, std::vector<int>& evidence_variables,
 		std::ofstream& out) {
 	factor result;
-	unsigned int count=0;
+	unsigned int count = 0;
 	for (int i : query_variables) {
 		result.parent_ids.push_back(abs(i) - 1);
 	}
@@ -42,7 +42,7 @@ void process_query_rejection_sampling(network& _network,
 		double sample = rand() / (double) RAND_MAX;
 		unsigned int index = 0;
 		bool reject = false;
-		/* for each node x_i in the querty, Topologically sorted */
+		/* for each node x_i in the query, Topologically sorted */
 		for (int x_i : _network.ids) {
 			index = 0;
 			/* Constructing Index */
@@ -81,8 +81,9 @@ void process_query_rejection_sampling(network& _network,
 		count++;
 	}
 	delete[] values;
-	if(count==0){
-		out << "The evedences are not possible to occure at the same time."<<endl;
+	if (count == 0) {
+		out
+				<< "These evidences can't occur at the same time, i.e. P(e) = 0, thus P(Q|e) is undefined.\n";
 		return;
 	}
 	/* Averaging Values */
