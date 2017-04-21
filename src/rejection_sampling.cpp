@@ -21,6 +21,7 @@ void process_query_rejection_sampling(network& _network,
 		std::vector<int>& query_variables, std::vector<int>& evidence_variables,
 		std::ofstream& out) {
 	factor result;
+	unsigned int count=0;
 	for (int i : query_variables) {
 		result.parent_ids.push_back(abs(i) - 1);
 	}
@@ -77,10 +78,15 @@ void process_query_rejection_sampling(network& _network,
 			index |= values[abs(x_i) - 1];
 		}
 		result.matrix[index]++;
+		count++;
 	}
 	delete[] values;
+	if(count==0){
+		out << "The evedences are not possible to occure at the same time."<<endl;
+		return;
+	}
 	/* Averaging Values */
 	for (unsigned int i = 0; i < result.len; i++)
-		result.matrix[i] /= SAMPLE_COUNT;
+		result.matrix[i] /= count;
 	write_output(result, query_variables, out);
 }
