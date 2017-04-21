@@ -82,7 +82,7 @@ void process_query_rejection_sampling(network& _network,
 	}
 	delete[] values;
 	if(count==0){
-		out << "The evedences are not possible to occure at the same time."<<endl;
+		out << "The evedences are not possible to occure at the same time."<<std::endl;
 		return;
 	}
 	/* Averaging Values */
