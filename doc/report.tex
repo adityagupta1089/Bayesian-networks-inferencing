@@ -15,7 +15,11 @@ Milan Chaudhary
 \maketitle
 
 \section{Introduction}
-In this Lab exercise .... .... ... 
+In this Lab exercise, we implemented the inference from Bayesian Networks using
+\begin{itemize}
+    \item Variable Elimination: which is an exact inference. It takes much space and time.
+    \item Rejection Sampling: which is an approximated inference. It's a highly efficient algorithm, that reduces required time and space for large number of variables.
+\end{itemize}
 
 \section{Variable Elimination}
 In this section of program, first a container with all the conditional probability tables from each node instantiated by the evidence varaibles were collected. Then for each evidence variable, all the factors with that variable in it was collected and joined together. This process was repeated until all hidden variables were joined (and summed). The result was thus the required row (after normalization) of the table formed from joining all the remaining factors.
@@ -33,7 +37,15 @@ We note that for summing over a variable, the value of it only changes periodica
 The sum of the probabilities should be one, thus each was divided by the current sum.
 
 \section{Rejection Sampling}
-In this section of program, it will  n ..
+In this section of program, it will first take the topologically sorted variable list. It will sample the variable one by one from left to right in the list, which means that parents will be sampled before the child variable.
+This process will be done iteratively for a long finite time. In this process rejection will happen as soon as the evidences gets wrong value and will not be counted for probability calculations.
+The conditional probability of query variables are calculated using the non-rejected number of iterations and number of occurrences of the different values of query variables, which will be stored as a table representing probabilities of all possible value pairs of query variables.
+Then it will just pick the given value pair of query variables, which is the answer of input query.
+
+Note: If the evidence value collection is not possible it will answer "These evidences can't occur at the same time, i.e. P(e) = 0, thus \(P(Q|e)\) is undefined"
+as
+\[P(Q|e)=\frac{P(Q,e)}{P(e)}\]
+where P(Q,e) and P(e) are 0.
 
 \subsection{Convergence of the probabilities as function of\\ number of samples generated}
 \begin{tikzpicture}
@@ -55,4 +67,3 @@ In this section of program, it will  n ..
 \end{tikzpicture}
 
 \end{document}
-  

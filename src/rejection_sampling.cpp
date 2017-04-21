@@ -83,7 +83,7 @@ void process_query_rejection_sampling(network& _network,
 	delete[] values;
 	if (count == 0) {
 		out
-				<< "These evidences can't occur at the same time, i.e. P(e) = 0, thus P(Q|e) is undefined.\n";
+		 << "These evidences can't occur at the same time, i.e. P(e) = 0, thus P(Q|e) is undefined.\n";
 		return;
 	}
 	/* Averaging Values */
