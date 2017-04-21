@@ -1,8 +1,10 @@
 \title{Inferencing From Bayesian Networks\\Lab 5}
 \author{
 Aditya Gupta \\
+\underline{2015CSB1003}
 \and
-Milan Chaudhary
+Milan Chaudhary\\
+\underline{2015CSB1010}
 }
 \date{\today}
 
@@ -50,8 +52,8 @@ where $P(Q,e)$ and $P(e)$ are $0$.
 \subsection{Convergence of the probabilities as function of\\ number of samples generated}
 \begin{tikzpicture}
     \datavisualization [scientific axes,
-    						 x axis={logarithmic,length=12cm,label=Value of \texttt{SAMPLE\_COUNT},grid},
-     						 y axis={length=11cm,label=Total(Sum of) Error(s) in all Rejection Sampling Cases,grid},
+    						 x axis={logarithmic,length=12cm,label=Value of \texttt{SAMPLE\_COUNT} (Logarithmic),grid},
+     						 y axis={length=9cm,label=Total(Sum of) Error(s) in all Rejection Sampling Cases,grid},
     						 visualize as smooth line=my data,
     						 my data={style={mark=x}}]
     data {
@@ -62,7 +64,7 @@ where $P(Q,e)$ and $P(e)$ are $0$.
         10000, 0.022263
         100000, 0.005043
         1000000, 0.002833
-        10000000, 0 0.0010175
+        10000000,  0.0010175
     };
 \end{tikzpicture}
 
