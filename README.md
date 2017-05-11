@@ -12,4 +12,4 @@ e.g.
 ./bin/main.o input/b1.txt input/q1.txt output/o11.txt
 ```
 
-### For more information read `doc/report.pdf`
+### For more information read `report.pdf`
